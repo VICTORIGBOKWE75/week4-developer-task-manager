@@ -9,6 +9,11 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+// app.get("/", (req, res) => {
+//   res.send("API is running");
+// });
+
+
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/tasks", require("./routes/taskRoutes"));
 

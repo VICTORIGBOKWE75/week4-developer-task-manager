@@ -3,7 +3,6 @@ const { createTask, getMyTasks, getAllTasks } = require("../controllers/taskCont
 const { protect, authorize } = require("../middleware/auth");
 const router = express.Router();
 
-
 router.post("/", protect, createTask);
 router.get("/me", protect, getMyTasks);
 router.get("/all", protect, authorize(["admin"]), getAllTasks);

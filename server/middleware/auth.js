@@ -4,23 +4,33 @@ const jwt = require("jsonwebtoken");
 //Checks token and sets req.user
 exports.protect = (req, res, next) => {
     const auth = req.headers.authorization;
-    if(!auth || !auth.startswith("Bearer")) return res.status(401).json({ message: "No Token Given"});
 
+    console.log("AUTH HEADER:", auth);
 
-    const token =auth.split(" ")[1];
+    if (!auth || !auth.startsWith("Bearer")) {
+        return res.status(401).json({ message: "No Token Given" });
+    }
+
+    const token = auth.split(" ")[1];
+
+    console.log("TOKEN:", token);
+
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user= decoded; // {id, role}
+        req.user = decoded;
         next();
     } catch (error) {
-        return res.status(403).json({ message: "invalid token"});
+        console.error(error);
+        return res.status(403).json({ message: "invalid token" });
     }
 };
 
 //check role
 exports.authorize = (roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) return res.status(403),json({ message: "forbidden"});
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ message: "forbidden" });
+        }
         next();
     };
 };
